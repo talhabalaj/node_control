@@ -19,13 +19,13 @@ export class ShadowSocksNode {
   }
 
   private async ensureConnected() {
-    if (this.isConnected()) return true;
+    if (this.isConnected()) return;
 
     await this.sshClient.connect({
-      host: this.config.sshHost,
+      host: this.config.sshHost.trim(),
       port: 22,
-      password: this.config.sshPassword,
-      username: this.config.sshUser,
+      password: this.config.sshPassword.trim(),
+      username: this.config.sshUser.trim(),
     });
   }
 
@@ -55,23 +55,29 @@ export class ShadowSocksNode {
       PASSWORD: this.config.ssPassword,
     });
 
-    return response.code === null;
+    return response;
   }
 
   async getStatus() {
     const response = await this.runSriptFile(path.join(__dirname, "./scripts/get_status.sh"));
 
-    if (!response.stdout) return null;
+    if (!response.stdout) return parseSystemDStatusOutput(response.stderr);
 
     return parseSystemDStatusOutput(response.stdout);
   }
 
   async runShellCommand(command: string) {
+    await this.ensureConnected();
     return this.sshClient.execCommand(command);
   }
 
   async restartServer() {
     const r = await this.runShellCommand(`systemctl restart ssserver`);
-    return r.code === null;
+    return r;
+  }
+  
+  async stopServer() {
+    const r = await this.runShellCommand(`systemctl stop ssserver`);
+    return r;
   }
 }
