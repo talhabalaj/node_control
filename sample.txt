@@ -1,0 +1,8 @@
+● ssserver.service - Shadow socks server
+   Loaded: loaded (/etc/systemd/system/ssserver.service; enabled; vendor preset: enabled)
+   Active: active (running) since Tue 2021-09-07 06:20:54 UTC; 9min ago
+ Main PID: 23580 (ssserver)
+    Tasks: 1 (limit: 1167)
+   Memory: 7.3M
+   CGroup: /system.slice/ssserver.service
+           └─23580 /usr/bin/python3 /usr/local/bin/ssserver -c ss.json
