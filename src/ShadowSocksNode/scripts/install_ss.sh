@@ -3,9 +3,11 @@ if ! [ -f "/etc/debian_version" ]; then
   exit -1;
 fi
 
-apt update -y
-apt upgrade -y
-apt install -y python3-pip nload htop mtr iptraf-ng git ufw
+export DEBIAN_FRONTEND=noninteractive 
+
+apt update -y -q
+apt upgrade -y -q
+apt install -y -q python3-pip nload htop mtr iptraf-ng git ufw
 
 pip3 install git+https://github.com/shadowsocks/shadowsocks.git@master
 
