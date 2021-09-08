@@ -1,3 +1,8 @@
+if ! [ -f "/etc/debian_version" ]; then
+  logger -s "[error] Debian is required"
+  exit -1;
+fi
+
 apt update -y
 apt upgrade -y
 apt install -y python3-pip nload htop mtr iptraf-ng git ufw
