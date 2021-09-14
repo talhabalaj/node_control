@@ -3,6 +3,16 @@ if ! [ -f "/etc/debian_version" ]; then
   exit -1;
 fi
 
+
+cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian/ buster main
+deb-src http://deb.debian.org/debian/ buster main
+deb http://deb.debian.org/debian/ buster-updates main
+deb-src http://deb.debian.org/debian/ buster-updates main
+deb http://security.debian.org/debian-security buster/updates main
+deb-src http://security.debian.org/debian-security buster/updates main
+EOF
+
 export DEBIAN_FRONTEND=noninteractive 
 
 apt update -y -q
