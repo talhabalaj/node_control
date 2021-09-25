@@ -1,7 +1,7 @@
 import { NodeSSH, SSHExecCommandResponse } from "node-ssh";
 import path from "path";
 import fs from "fs/promises";
-import { SystemDResult } from "../parser";
+import { SystemDResult } from "./parser";
 
 export interface NodeControlBaseConfig {
   sshHost: string;

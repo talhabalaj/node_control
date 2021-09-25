@@ -1,1 +1,1 @@
-export * from "./ShadowSocksNode/ShadowSocksNode";
+export * from "./ShadowSocksNode";

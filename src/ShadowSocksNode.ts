@@ -1,6 +1,6 @@
 import path from "path";
-import { parseSystemDStatusOutput } from "../parser";
-import NodeControl, { NodeControlBaseConfig } from "../NodeControl/NodeControl";
+import { parseSystemDStatusOutput } from "./parser";
+import NodeControl, { NodeControlBaseConfig } from "./NodeControl";
 
 interface ShadowSocksNodeConfig extends NodeControlBaseConfig {
   ssPassword: string;
