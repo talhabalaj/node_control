@@ -4,7 +4,8 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "install": "tsc"
+    "install": "tsc",
+    "build:watch": "tsc --watch"
   },
   "dependencies": {
     "@types/inquirer": "^7.3.3",

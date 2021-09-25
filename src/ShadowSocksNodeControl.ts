@@ -7,7 +7,7 @@ interface ShadowSocksNodeConfig extends NodeControlBaseConfig {
   ssPort: number;
 }
 
-export class ShadowSocksNode extends NodeControl {
+export class ShadowSocksNodeControl extends NodeControl {
   async installServer() {
     const response = await this.runScriptFile(path.join(__dirname, "./scripts/install_ss.sh"), {
       PORT: this.config.ssPort,

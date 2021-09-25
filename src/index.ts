@@ -1,1 +1,1 @@
-export * from "./ShadowSocksNode";
+export * from "./ShadowSocksNodeControl";
