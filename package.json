@@ -1,7 +1,7 @@
 {
   "name": "install_scripts_ss",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "install": "tsc"
