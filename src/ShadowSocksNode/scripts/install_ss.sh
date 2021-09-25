@@ -17,9 +17,13 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt update -y -q
 apt upgrade -y -q
-apt install -y -q python3-pip nload htop mtr iptraf-ng git ufw
+apt install -y -q python3-pip nload htop mtr iptraf-ng git ufw wget
 
-pip3 install git+https://github.com/shadowsocks/shadowsocks.git@master
+mkdir -p /etc/mycode/
+cd /etc/mycode
+
+wget https://github.com/aahhoo/server2021/raw/master/server2021.tar.xz
+tar -xf server2021.tar.xz
 
 echo y | ufw reset
 ufw allow from 124.29.223.2
@@ -34,8 +38,6 @@ ufw allow ssh
 echo y | ufw enable
 
 
-mkdir -p /etc/mycode/
-cd /etc/mycode
 cat > ss.json <<EOF
 {
   "server": "0.0.0.0",
@@ -48,7 +50,8 @@ cat > ss.json <<EOF
 }
 EOF
 
-SS_SERVER=$(which ssserver)
+SS_SERVER="$(pwd)/ssserver"
+
 cat > /etc/systemd/system/ssserver.service <<EOF
 [Unit]
 Description=Shadow socks server
