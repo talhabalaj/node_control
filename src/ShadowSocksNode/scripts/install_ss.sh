@@ -16,7 +16,6 @@ EOF
 export DEBIAN_FRONTEND=noninteractive 
 
 apt update -y -q
-apt upgrade -y -q
 apt install -y -q nload htop mtr iptraf-ng git ufw wget xz-utils tar
 
 mkdir -p /etc/mycode/
