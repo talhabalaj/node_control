@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 
-interface SystemDResult {
+export interface SystemDResult {
   loaded: "loaded" | "not-found" | "error";
   active: "active" | "inactive";
   mainPid: number;

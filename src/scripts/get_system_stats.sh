@@ -30,7 +30,7 @@ if [ "$IS_DEBIAN" -ne 0 ]
       interface=$(route -n | grep U | tail -1 | awk '{print $NF}')
   fi
 else
-  interface=$(ip -r | grep default | awk '{print $5}')
+  interface=$(ip r | grep default | awk '{print $5}')
 fi
 
 rx=$(S=1; F=/sys/class/net/$interface/statistics/rx_bytes; X=`cat $F`; sleep $S; Y=`cat $F`; BPS="$(((Y-X)/S))"; echo $BPS)
@@ -39,9 +39,10 @@ tx=$(S=1; F=/sys/class/net/$interface/statistics/tx_bytes; X=`cat $F`; sleep $S;
 if [ "$NODE_TYPE" != "shadowsocks" ]
   then 
     connected_users=$(occtl show users | wc -l)
+    connected_users=$((($connected_users-1)))
   else 
     connected_users=$(netstat -anp | grep :$NODE_PORT | grep ESTABLISHED | wc -l)
 fi
 
 
-echo "{ \"mem\": \"$mem\", \"cpu\": \"$cpu\", \"rx\": \"$rx\", \"tx\": \"$tx\", \"connected_users\": \"$connected_users\", \"interface\": \"$interface\" }"
+echo "{ \"mem\": \"$mem\", \"cpu\": \"$cpu\", \"rx\": $rx, \"tx\": $tx, \"connected_users\": $connected_users, \"interface\": \"$interface\" }"
