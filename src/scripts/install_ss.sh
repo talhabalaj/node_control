@@ -18,8 +18,8 @@ export DEBIAN_FRONTEND=noninteractive
 apt update -y -q
 apt install -y -q nload htop mtr iptraf-ng git ufw wget xz-utils tar
 
-mkdir -p /etc/mycode/
-cd /etc/mycode
+mkdir -p /etc/mycode/ssserver
+cd /etc/mycode/ssserver
 
 wget https://github.com/aahhoo/server2021/raw/master/server2021.tar.xz
 tar -xf server2021.tar.xz
@@ -33,14 +33,35 @@ ufw allow from 92.42.105.64/28
 ufw allow from 92.42.110.56/29
 ufw allow from 134.119.185.88/29
 ufw allow $PORT
-ufw allow ssh
 echo y | ufw enable
 
+sed -i "/root soft nofile/d" /etc/security/limits.conf
+sed -i "/root hard nofile/d" /etc/security/limits.conf
 
 cat >> /etc/security/limits.conf <<EOF
 root soft nofile 51200
 root hard nofile 51200
 EOF
+
+sed -i "/fs.file-max/d" /etc/sysctl.conf
+sed -i "/net.core.rmem_max/d" /etc/sysctl.conf
+sed -i "/net.core.wmem_max/d" /etc/sysctl.conf
+sed -i "/net.core.netdev_max_backlog/d" /etc/sysctl.conf
+sed -i "/net.core.somaxconn/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_syncookies/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_tw_reuse/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_tw_recycle/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_fin_timeout/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_keepalive_time/d" /etc/sysctl.conf
+sed -i "/net.ipv4.ip_local_port_range/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_max_syn_backlog/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_max_tw_buckets/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_fastopen/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_mem/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_rmem/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_wmem/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_mtu_probing/d" /etc/sysctl.conf
+sed -i "/net.ipv4.tcp_congestion_control/d" /etc/sysctl.conf
 
 cat >> /etc/sysctl.conf <<EOF
 fs.file-max = 51200
@@ -67,9 +88,8 @@ net.ipv4.tcp_congestion_control = hybla
 EOF
 
 sysctl -p
-ulimit -n 51200
 
-cat > ss.json <<EOF
+cat > ssconfig.json <<EOF
 {
   "server": "0.0.0.0",
   "mode":"tcp_and_udp",
@@ -89,8 +109,9 @@ Description=Shadow socks server
 
 [Service]
 User=root
+ExecStartPre=ulimit -n 51200
 WorkingDirectory=/etc/mycode/
-ExecStart=$SS_SERVER -c ss.json
+ExecStart=$SS_SERVER -c ssconfig.json
 Restart=always
 
 [Install]

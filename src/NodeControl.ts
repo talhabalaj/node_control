@@ -61,8 +61,13 @@ export default abstract class NodeControl {
     return this.sshClient.execCommand(command);
   }
 
+  async reboot() {
+    this.runShellCommand("reboot");
+    this.dispose();
+  }
+
   dispose() {
-    return this.sshClient.dispose();
+    this.sshClient.dispose();
   }
 
   abstract getSystemStats(...args: any[]): Promise<NodeSystemStats>;
