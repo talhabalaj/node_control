@@ -4,20 +4,22 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "install": "tsc",
-    "build:watch": "tsc --watch"
+    "install": "yarn clean && tsc && yarn copy:scripts",
+    "clean": "rimraf dist/",
+    "copy:scripts": "copyfiles -u 1 src/scripts/*.sh dist/",
+    "build:watch": "yarn clean && tsc-watch --onSuccess \"yarn copy:scripts\""
   },
   "dependencies": {
-    "@types/inquirer": "^7.3.3",
-    "@types/ssh2": "^0.5.48",
-    "chalk": "^4.1.2",
-    "inquirer": "^8.1.2",
     "node-ssh": "^12.0.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
   },
   "devDependencies": {
     "@types/node": "^16.7.12",
-    "ts-node-dev": "^1.1.8"
+    "@types/ssh2": "^0.5.48",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "ts-node-dev": "^1.1.8",
+    "tsc-watch": "^4.5.0"
   }
 }

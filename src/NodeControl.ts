@@ -9,7 +9,7 @@ export interface NodeControlBaseConfig {
   sshUser: string;
 }
 
-interface NodeSystemStats {
+export interface NodeSystemStats {
   mem: string;
   cpu: string;
   rx: number;
@@ -61,18 +61,11 @@ export default abstract class NodeControl {
     return this.sshClient.execCommand(command);
   }
 
-  async getSystemStats() {
-    const response = await this.runScriptFile(
-      path.join(__dirname, "./scripts/get_system_stats.sh")
-    );
-
-    if (response.stderr) {
-      throw Error(`Some error occurred while getting stats ${response.stderr}`);
-    }
-
-    return JSON.parse(response.stdout) as NodeSystemStats;
+  dispose() {
+    return this.sshClient.dispose();
   }
 
+  abstract getSystemStats(...args: any[]): Promise<NodeSystemStats>;
   abstract installServer(): Promise<SSHExecCommandResponse>;
   abstract getServiceStatus(): Promise<SystemDResult>;
   abstract restartServer(): Promise<SSHExecCommandResponse>;

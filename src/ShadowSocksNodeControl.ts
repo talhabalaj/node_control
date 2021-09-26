@@ -1,6 +1,6 @@
 import path from "path";
 import { parseSystemDStatusOutput } from "./parser";
-import NodeControl, { NodeControlBaseConfig } from "./NodeControl";
+import NodeControl, { NodeControlBaseConfig, NodeSystemStats } from "./NodeControl";
 
 interface ShadowSocksNodeConfig extends NodeControlBaseConfig {
   ssPassword: string;
@@ -37,5 +37,21 @@ export class ShadowSocksNodeControl extends NodeControl {
   async stopServer() {
     const r = await this.runShellCommand(`systemctl stop ssserver`);
     return r;
+  }
+
+  async getSystemStats(port: number) {
+    const response = await this.runScriptFile(
+      path.join(__dirname, "./scripts/get_system_stats.sh"),
+      {
+        NODE_TYPE: "shadowsocks",
+        NODE_PORT: port,
+      }
+    );
+
+    if (response.stderr) {
+      throw Error(`Some error occurred while getting stats ${response.stderr}`);
+    }
+
+    return JSON.parse(response.stdout) as NodeSystemStats;
   }
 }
