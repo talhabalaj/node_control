@@ -103,15 +103,19 @@ EOF
 
 SS_SERVER="$(pwd)/ssserver"
 
+cat > run.sh <<EOF
+ulimit -n 51200
+$SS_SERVER -c ssconfig.json
+EOF
+
 cat > /etc/systemd/system/ssserver.service <<EOF
 [Unit]
 Description=Shadow socks server
 
 [Service]
 User=root
-ExecStartPre=ulimit -n 51200
-WorkingDirectory=/etc/mycode/
-ExecStart=$SS_SERVER -c ssconfig.json
+WorkingDirectory=/etc/mycode/ssserver
+ExecStart=bash /etc/mycode/ssserver/run.sh
 Restart=always
 
 [Install]
