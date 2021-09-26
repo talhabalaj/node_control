@@ -62,7 +62,7 @@ export default abstract class NodeControl {
   }
 
   async reboot() {
-    this.runShellCommand("reboot");
+    await this.runShellCommand("reboot");
     this.dispose();
   }
 
