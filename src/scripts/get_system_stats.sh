@@ -18,8 +18,8 @@ if [ -z "$NODE_PORT" ] && [ "$NODE_TYPE" == "shadowsocks" ]
     echo "NODE_PORT is required as a env for shadowsocks"
 fi
 
-mem=$(cat /proc/meminfo | grep Mem | awk  '{total = $2} FNR==2 {free = $2} END {print (total-free)/total*100"%"}')
-cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
+mem=$(cat /proc/meminfo | grep Mem | awk  '{total = $2} FNR==2 {free = $2} END {print (total-free)/total*100}')
+cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
 
 if [ "$IS_DEBIAN" -ne 0 ]
   then
@@ -40,9 +40,10 @@ if [ "$NODE_TYPE" != "shadowsocks" ]
   then 
     connected_users=$(occtl show users | wc -l)
     connected_users=$((($connected_users-1)))
+    service_status=$(systemctl status ssserver | grep Active: | awk '{print $2}')
   else 
     connected_users=$(netstat -anp | grep :$NODE_PORT | grep ESTABLISHED | wc -l)
 fi
 
 
-echo "{ \"mem\": \"$mem\", \"cpu\": \"$cpu\", \"rx\": $rx, \"tx\": $tx, \"connected_users\": $connected_users, \"interface\": \"$interface\" }"
+echo "{ \"mem\": \"$mem\", \"cpu\": \"$cpu\", \"rx\": $rx, \"tx\": $tx, \"connected_users\": $connected_users, \"interface\": \"$interface\", \"service_status\": \"$service_status\"  }"
