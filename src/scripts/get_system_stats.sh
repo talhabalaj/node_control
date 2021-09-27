@@ -46,4 +46,4 @@ if [ "$NODE_TYPE" != "shadowsocks" ]
 fi
 
 
-echo "{ \"mem\": \"$mem\", \"cpu\": \"$cpu\", \"rx\": $rx, \"tx\": $tx, \"connected_users\": $connected_users, \"interface\": \"$interface\", \"service_status\": \"$service_status\"  }"
+echo "{ \"mem\": $mem, \"cpu\": $cpu, \"rx\": $rx, \"tx\": $tx, \"connected_users\": $connected_users, \"interface\": \"$interface\", \"service_status\": \"$service_status\"  }"

@@ -10,12 +10,13 @@ export interface NodeControlBaseConfig {
 }
 
 export interface NodeSystemStats {
-  mem: string;
-  cpu: string;
+  mem: number;
+  cpu: number;
   rx: number;
   tx: number;
   connected_users: number;
   interface: string;
+  service_status: string;
 }
 
 export default abstract class NodeControl {
