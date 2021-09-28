@@ -40,8 +40,8 @@ if [ "$NODE_TYPE" != "shadowsocks" ]
   then 
     connected_users=$(occtl show users | wc -l)
     connected_users=$((($connected_users-1)))
-    service_status=$(systemctl status ssserver | grep Active: | awk '{print $2}')
   else 
+    service_status=$(systemctl status ssserver | grep Active: | awk '{print $2}')
     connected_users=$(netstat -anp | grep :$NODE_PORT | grep ESTABLISHED | wc -l)
 fi
 
