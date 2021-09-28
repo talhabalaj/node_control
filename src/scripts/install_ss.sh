@@ -16,7 +16,7 @@ EOF
 export DEBIAN_FRONTEND=noninteractive 
 
 apt update -y -q
-apt install -y -q nload htop mtr iptraf-ng git ufw wget xz-utils tar
+apt install -y -q nload htop mtr iptraf-ng git ufw wget xz-utils tar nano
 
 mkdir -p /etc/mycode/ssserver
 cd /etc/mycode/ssserver
