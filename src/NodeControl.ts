@@ -34,6 +34,7 @@ export default abstract class NodeControl {
       port: 22,
       password: this.config.sshPassword.trim(),
       username: this.config.sshUser.trim(),
+      readyTimeout: 10000,
     });
   }
 
