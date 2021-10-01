@@ -18,7 +18,7 @@ if [ -z "$NODE_PORT" ] && [ "$NODE_TYPE" == "shadowsocks" ]
     echo "NODE_PORT is required as a env for shadowsocks"
 fi
 
-mem=$(cat /proc/meminfo | grep Mem | awk  '{total = $2} FNR==2 {free = $2} END {print (total-free)/total*100}')
+mem=$(cat /proc/meminfo | grep Mem | awk  'FNR==1 {total = $2} FNR==2 {free = $2} END {print ((total-free)/total)*100}')
 cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
 
 if [ "$IS_DEBIAN" -ne 0 ]
