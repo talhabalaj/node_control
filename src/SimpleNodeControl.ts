@@ -2,7 +2,7 @@ import { SSHExecCommandResponse } from "node-ssh";
 import NodeControl, { NodeSystemStats } from "./NodeControl";
 import { SystemDResult } from "./parser";
 
-export default class SimpleNodeControl extends NodeControl {
+export class SimpleNodeControl extends NodeControl {
   getSystemStats(...args: any[]): Promise<NodeSystemStats> {
     throw new Error("Method not implemented.");
   }
