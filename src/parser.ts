@@ -1,5 +1,3 @@
-import fs from "fs/promises";
-
 export interface SystemDResult {
   loaded: "loaded" | "not-found" | "error";
   active: "active" | "inactive";
@@ -12,7 +10,9 @@ const toCamelCase = (string: string) => {
   return string
     .toLowerCase()
     .split(" ")
-    .map((value, index) => (index !== 0 ? `${value[0].toUpperCase()}${value.substring(1)}` : value))
+    .map((value, index) =>
+      index !== 0 ? `${value[0].toUpperCase()}${value.substring(1)}` : value
+    )
     .join("");
 };
 
@@ -35,10 +35,14 @@ export const parseSystemDStatusOutput = (string: string): SystemDResult => {
 
   for (const line of lines) {
     const trimmed = line.trim();
-    const result = /^(?<key>[A-Za-z\s]+)\: (?<value>[A-Za-z0-9\.]+)(?<prop>.*)$/g.exec(trimmed);
+    const result =
+      /^(?<key>[A-Za-z\s]+)\: (?<value>[A-Za-z0-9\.]+)(?<prop>.*)$/g.exec(
+        trimmed
+      );
 
     if (result && result.groups) {
-      props[toCamelCase(result.groups.key)] = Number(result.groups.value) || result.groups.value;
+      props[toCamelCase(result.groups.key)] =
+        Number(result.groups.value) || result.groups.value;
     }
   }
 

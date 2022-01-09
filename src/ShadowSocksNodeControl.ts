@@ -22,11 +22,7 @@ export class ShadowSocksNodeControl extends NodeControl {
   }
 
   async getServiceStatus() {
-    const response = await this.runScriptFile(path.join(__dirname, "./scripts/get_status.sh"));
-
-    if (!response.stdout) return parseSystemDStatusOutput(response.stderr);
-
-    return parseSystemDStatusOutput(response.stdout);
+    return this.getServiceStatusByServiceName("ssserver");
   }
 
   async restartServer() {
@@ -40,18 +36,6 @@ export class ShadowSocksNodeControl extends NodeControl {
   }
 
   async getSystemStats(port: number) {
-    const response = await this.runScriptFile(
-      path.join(__dirname, "./scripts/get_system_stats.sh"),
-      {
-        NODE_TYPE: "shadowsocks",
-        NODE_PORT: port,
-      }
-    );
-
-    if (response.stderr) {
-      throw Error(`Some error occurred while getting stats ${response.stderr}`);
-    }
-
-    return JSON.parse(response.stdout) as NodeSystemStats;
+    return super.getSystemStatsByVpnType("shadowsocks", port);
   }
 }

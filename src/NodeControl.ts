@@ -1,7 +1,7 @@
 import { NodeSSH, SSHExecCommandResponse } from "node-ssh";
 import path from "path";
 import fs from "fs/promises";
-import { SystemDResult } from "./parser";
+import { parseSystemDStatusOutput, SystemDResult } from "./parser";
 
 export interface NodeControlBaseConfig {
   sshHost: string;
@@ -76,4 +76,35 @@ export default abstract class NodeControl {
   abstract getServiceStatus(): Promise<SystemDResult>;
   abstract restartServer(): Promise<SSHExecCommandResponse>;
   abstract stopServer(): Promise<SSHExecCommandResponse>;
+
+  protected async getSystemStatsByVpnType(
+    type: "shadowsocks" | "openconnect",
+    port?: number
+  ): Promise<NodeSystemStats> {
+    const response = await this.runScriptFile(
+      path.join(__dirname, "./scripts/get_system_stats.sh"),
+      {
+        NODE_TYPE: type,
+        NODE_PORT: port,
+      }
+    );
+
+    if (response.stderr) {
+      throw Error(`Some error occurred while getting stats ${response.stderr}`);
+    }
+
+    return JSON.parse(response.stdout) as NodeSystemStats;
+  }
+
+  protected async getServiceStatusByServiceName(
+    serviceName: string
+  ): Promise<SystemDResult> {
+    const response = await this.runShellCommand(
+      `systemctl status ${serviceName}`
+    );
+
+    if (!response.stdout) return parseSystemDStatusOutput(response.stderr);
+
+    return parseSystemDStatusOutput(response.stdout);
+  }
 }
