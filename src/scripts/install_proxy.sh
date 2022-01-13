@@ -31,7 +31,7 @@ timedatectl set-timezone UTC
 apt-get -y update
 apt-get -y install build-essential git curl net-tools mtr iptraf-ng wget nload ufw certbot dnsutils
 
-domain_ip=$(dig likova.club | grep "IN" | grep "^[^;]" | awk '{ print $5 }')
+domain_ip=$(dig $domain | grep "IN" | grep "^[^;]" | awk '{ print $5 }')
 
 if [ -z $domain_ip ] ; then
   echo 'No IP Found, Exiting' >&2
