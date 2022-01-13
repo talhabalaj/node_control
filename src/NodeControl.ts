@@ -72,7 +72,7 @@ export default abstract class NodeControl {
   }
 
   abstract getSystemStats(...args: any[]): Promise<NodeSystemStats>;
-  abstract installServer(): Promise<SSHExecCommandResponse>;
+  abstract installServer(...args: any[]): Promise<SSHExecCommandResponse>;
   abstract getServiceStatus(): Promise<SystemDResult>;
   abstract restartServer(): Promise<SSHExecCommandResponse>;
   abstract stopServer(): Promise<SSHExecCommandResponse>;
