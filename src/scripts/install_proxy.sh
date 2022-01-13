@@ -24,6 +24,13 @@ fi
 #     exit 1
 # fi
 
+if ! [ -f "/etc/debian_version" ]; then
+  logger -s "[error] Debian is required"
+  exit -1;
+fi
+
+export DEBIAN_FRONTEND=noninteractive 
+
 myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Host IP is $myip"
 
@@ -64,7 +71,7 @@ npm install pm2@latest -g
 pm2 update
 pm2 startup
 
-mkdir /etc/mycode
+mkdir -p /etc/mycode
 cd /etc/mycode
 
 git clone "https://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@github.com/aahhoo/VezGate-PROXY.git"
@@ -81,7 +88,7 @@ certbot certonly --standalone --preferred-challenges http --agree-tos --email my
 pm2 start all
 
 cat > "cronfile.sh" <<EOF
-0 0 */30 * * /usr/bin/certbot renew --quiet
+0 0 */20 * * /usr/bin/certbot renew --quiet
 EOF
 
 crontab cronfile.sh
