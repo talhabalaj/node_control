@@ -31,6 +31,7 @@ export default abstract class NodeControl {
 
     await this.sshClient.connect({
       host: this.config.sshHost.trim(),
+      readyTimeout: 40000,
       port: 22,
       password: this.config.sshPassword.trim(),
       username: this.config.sshUser.trim(),
