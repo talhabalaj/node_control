@@ -20,14 +20,16 @@ export interface NodeSystemStats {
 }
 
 export default abstract class NodeControl {
-  protected sshClient: NodeSSH = new NodeSSH();
+  protected sshClient: NodeSSH | null = null;
 
   get isConnected() {
-    return this.sshClient.isConnected;
+    return this.sshClient !== null;
   }
 
   protected async ensureConnected() {
-    if (this.isConnected()) return;
+    if (this.isConnected) return;
+
+    this.sshClient = new NodeSSH();
 
     await this.sshClient.connect({
       host: this.config.sshHost.trim(),
@@ -47,7 +49,7 @@ export default abstract class NodeControl {
     const scriptPath = filePath;
     const remoteScriptPath = path.join("/etc/mycode/", scriptPath);
 
-    await this.sshClient.putFile(scriptPath, remoteScriptPath);
+    await this.sshClient!.putFile(scriptPath, remoteScriptPath);
 
     const envString =
       env &&
@@ -60,7 +62,7 @@ export default abstract class NodeControl {
 
   async runShellCommand(command: string) {
     await this.ensureConnected();
-    return this.sshClient.execCommand(command);
+    return this.sshClient!.execCommand(command);
   }
 
   async reboot() {
@@ -68,8 +70,19 @@ export default abstract class NodeControl {
     this.dispose();
   }
 
+  async registerLoggers() {
+    if (this.sshClient) {
+      this.sshClient.connection?.on("error", console.log);
+      this.sshClient.connection?.on("close", console.log);
+      this.sshClient.connection?.on("end", console.log);
+    }
+  }
+
   dispose() {
-    this.sshClient.dispose();
+    if (this.sshClient?.connection) {
+      this.sshClient.dispose();
+      this.sshClient = null;
+    }
   }
 
   abstract getSystemStats(...args: any[]): Promise<NodeSystemStats>;

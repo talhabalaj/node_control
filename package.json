@@ -10,11 +10,11 @@
     "build:watch": "yarn clean && tsc-watch --onSuccess \"yarn copy:scripts\""
   },
   "dependencies": {
+    "copyfiles": "^2.4.1",
     "node-ssh": "^12.0.0",
-    "ts-node": "^10.2.1",
-    "typescript": "^4.4.2",
     "rimraf": "^3.0.2",
-    "copyfiles": "^2.4.1"
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
   },
   "devDependencies": {
     "@types/node": "^16.7.12",
